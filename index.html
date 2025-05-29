@@ -77,7 +77,8 @@
     </div>
 
     <div class="buttons">
-        <button onclick="reset()" style="font-size: 20px" class="reset-button">Reset</button>
+        <button onclick="reset();" style="font-size: 20px" class="reset-button">Reset</button>
+        <button onclick="autoPlay();" style="font-size: 20px" class="reset-button js-auto-play">Auto Play</button>
     </div>
 
     <!-- Sound file -->
@@ -86,6 +87,34 @@
     <script>
         let score = JSON.parse(localStorage.getItem('score')) || { wins: 0, losses: 0, ties: 0 };
         document.querySelector('.curr_score').innerHTML = `Wins:${score.wins} Losses:${score.losses} Ties:${score.ties}`;
+    
+    let isPlaying = false;
+    let intervalId;
+    
+    function autoPlay(){
+        if(!isPlaying){
+            intervalId = setInterval(function(){
+                const random = Math.random();
+            let computerMove = '';
+
+            if (random <= 1 / 3) {
+                computerMove = 'rock';
+            } else if (random <= 2 / 3) {
+                computerMove = 'paper';
+            } else {
+                computerMove = 'scissors';
+            }
+                playGame(computerMove);
+            }, 2000);
+            isPlaying = true;
+            document.querySelector('.js-auto-play')
+            .innerHTML = "Stop Play";
+        } else{
+            clearInterval(intervalId);
+            isPlaying = false;
+            document.querySelector('.js-auto-play').innerHTML = 'Auto Play';
+        }
+    }
 
         function playGame(userMove) {
             document.getElementById('clickSound').play();
